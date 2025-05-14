@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mental Health Support Bot</title>
+  <link rel="stylesheet" href="styles.css">
+  
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0f8ff; padding: 20px; }
+    #chatbox { width: 100%; height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; background: #ffffff; }
+    #userInput { width: 80%; padding: 10px; }
+    #sendButton { padding: 10px; }
+    .bot { color: blue; margin: 5px 0; }
+    .user { color: green; margin: 5px 0; text-align: right; }
+  </style>
+</head>
+<body>
+
+<h2>Mental Health Support Chatbot 🌼</h2>
+
+<div id="chatbox"></div>
+
+<input type="text" id="userInput" placeholder="Type your message..." />
+<button id="sendButton">Send</button>
+<script src="chatbot.js"></script>
+<script src="extras.js"></script>
+
+<script>
+  const chatbox = document.getElementById('chatbox');
+  const userInput = document.getElementById('userInput');
+  const sendButton = document.getElementById('sendButton');
+
+  const crisisKeywords = ["hurt myself", "suicide", "end it", "kill myself"];
+
+  function addMessage(sender, text) {
+    const message = document.createElement('div');
+    message.className = sender;
+    message.innerText = text;
+    chatbox.appendChild(message);
+    chatbox.scrollTop = chatbox.scrollHeight;
+  }
+
+  function botResponse(userText) {
+    userText = userText.toLowerCase();
+
+    // Crisis detection
+    if (crisisKeywords.some(keyword => userText.includes(keyword))) {
+      return "I'm really sorry you're feeling this way. Please reach out to someone immediately. You can call a crisis line like 988 (USA) or find a local emergency number. ❤️";
+    }
+
+    if (userText.includes('anxious') || userText.includes('anxiety')) {
+      return "I'm sorry you're feeling anxious. Would you like to try a calming breathing exercise together?";
+    }
+    if (userText.includes('sad') || userText.includes('depressed')) {
+      return "I'm here for you. It's okay to feel sad sometimes. Would you like a small self-care idea?";
+    }
+    if (userText.includes('yes') || userText.includes('okay') || userText.includes('sure')) {
+      return "Let's try this: Breathe in deeply for 4 seconds, hold for 4 seconds, and breathe out slowly for 4 seconds. 🌿 Try this a few times.";
+    }
+    if (userText.includes('no') || userText.includes('not now')) {
+      return "That's totally fine. I'm here whenever you want to talk. 🤗";
+    }
+
+    return "I'm here to listen. Tell me more about how you're feeling.";
+  }
+
+  function handleSend() {
+    const text = userInput.value.trim();
+    if (text === '') return;
+
+    addMessage('user', text);
+    const response = botResponse(text);
+    setTimeout(() => addMessage('bot', response), 500);
+
+    userInput.value = '';
+  }
+
+  sendButton.addEventListener('click', handleSend);
+  userInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      handleSend();
+    }
+  });
+
+  // Greeting
+  addMessage('bot', "Hi there 🌸 I'm here to support you. How are you feeling today?");
+</script>
+
+</body>
+</html>
